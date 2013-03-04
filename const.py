@@ -1,5 +1,8 @@
 DEBUG = True
-SECURE = False
+SECURE = True
+
+SERVERPORT = 5060
+CLIENTPORT = 5070
 
 serverlist = (
 	("localhost", 5060),

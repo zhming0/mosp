@@ -12,6 +12,8 @@ from daemon import Daemon
 class ThreadingTCPServer(SocketServer.ThreadingMixIn, SocketServer.TCPServer): pass
 
 class Socks5Server(SocketServer.StreamRequestHandler):
+    
+    allow_reuse_address = True
 
     '''
     Hendle the version infomation and authentication message
@@ -125,10 +127,9 @@ class Socks5ServerDaemon(Daemon):
                         stderr = "server_stderr.log")
 
     def run(self):
-        SECURE = True
         threading.stack_size(1024 * 512 * 2)
         socket.setdefaulttimeout(30)
-        server = ThreadingTCPServer(('', 5070), Socks5Server)
+        server = ThreadingTCPServer(('', SERVERPORT), Socks5Server)
         server_thread = threading.Thread(target=server.serve_forever)
         server_thread.daemon = True
         

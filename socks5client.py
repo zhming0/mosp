@@ -31,6 +31,8 @@ class ThreadingTCPServer(SocketServer.ThreadingMixIn, SocketServer.TCPServer): p
 
 class Socks5Client(SocketServer.StreamRequestHandler):
 
+    allow_reuse_address = True
+
     def connect_remote(self, id, addr, result):
         result[id] = create_socket(addr, secure=True)
 
@@ -215,12 +217,12 @@ class Socks5ClientDaemon(Daemon):
     def run(self):
         threading.stack_size(1024 * 512 * 2)
         socket.setdefaulttimeout(30)
-        server = ThreadingTCPServer(('', 5070), Socks5Client)
+        server = ThreadingTCPServer(('', CLIENTPORT), Socks5Client)
         server_thread = threading.Thread(target=server.serve_forever)
         server_thread.daemon = True
         
         self.cfg.backup()
-        self.cfg.modify("127.0.0.1", "5070")
+        self.cfg.modify("127.0.0.1", str(CLIENTPORT))
         print ">> MOSP client start working"
         server_thread.start()
 

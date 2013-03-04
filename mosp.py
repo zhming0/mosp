@@ -22,7 +22,7 @@ def printhelp(s):
     if serverstate:
         print "mosp server is running"
     else:
-        print "mosp client is NOT running"
+        print "mosp server is NOT running"
 
 if __name__ == "__main__":
     if os.geteuid() != 0:
